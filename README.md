@@ -67,3 +67,135 @@ void main() {
 - We have to use at least two core basic widgets in `runApp()` to display some UI
   - First `MaterialApp()` It looks like a function but it’s not it’s a class. When we pass `MaterialApp()` to `runApp()` as an argument we tell the flutter we use `MaterialApp()` widget on the screen.
   - We then need to pass another widget in `MaterailApp()` but, we’ll look at that in the next lesson.
+
+## Positional & Named Arguments
+
+- Now we’ll look at what to put in the MaterialApp() widget.
+  - We can put positional parameter
+  - We can put a name parameter.
+- So in the `MaterialApp()` we can put `home:` parameter followed by the `Text()` Widget provided by the Flutter team.
+
+```dart
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MaterialApp(
+    home: Text(),
+  ));
+}
+```
+
+## Combining Multiple Widgets
+
+- In the `Text()` Widget there is a positional parameter that is required.
+- So in the `Text()` Widget we must put some `string` value there.
+
+```dart
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MaterialApp(
+    home: Text("Hello, World"),
+  ));
+}
+```
+
+## Understanding “const” Values
+
+- const helps Dart improve the run time performance.
+- Because it reuses the value instead of duplicating another object value again.
+
+```dart
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MaterialApp(
+    home: Text("Hello, World!"),
+  ));
+}
+```
+
+## Building More Complex Widget Trees
+
+- To make our app beautiful we need a scaffold widget inside the above widgets.
+- `MaterialApp()` Widget is a root widget for setting up the app.
+- Scaffold takes an argument like body.
+
+```dart
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(
+    const MaterialApp(
+      home: Scaffold(
+        body: Center(child: Text("Hello, World!")),
+      ),
+    ),
+  );
+}
+```
+
+## Understanding Value Types
+
+- Dart is a type-safe language
+  - All value you’re working with is a certain type.
+    - `MaterialApp()` has the type of MaterialApp and Object and Widget.
+  - Why the type existed?
+    - The answer is some classes only accept a certain type.
+
+## Configuring Widget & Understanding Objects
+
+- There are lots more arguments that are accepted by the Scaffold widget beside `body:` among those is **`backgroundColor:`** if we ctrl + space we can see Color? the? mean we know it can be null.
+- Object
+
+## Working with “Configuration Objects” (Non-Wiget Objects)
+
+- We introduced to new Widget called Container which accepts the argument like decoration:
+
+```dart
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(
+    MaterialApp(
+      home: Scaffold(
+          body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors:
+          ),
+        ),
+        child: Center(
+          child: Text("Hello World"),
+        ),
+      )),
+    ),
+  );
+}
+```
+
+## Generics, Lists & Adding Gradient Colors
+
+- Generics is a type that can be used in different types like lists. So by specifying the type in the <> we explicitly tell which type we will be using.
+
+```dart
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MaterialApp(
+    home: Scaffold(
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(colors: [
+            Color.fromARGB(255, 26, 2, 80),
+            Color.fromARGB(255, 45, 7, 98)
+          ]),
+        ),
+        child: const Center(
+          child: Text("Hello VireakRoth!!"),
+        ),
+      ),
+    ),
+  ));
+}
+```
