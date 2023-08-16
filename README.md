@@ -5,7 +5,6 @@ Feel free to PR to improve or update this course note.
 # Contents
 
 - [Section 2 Flutter & Dart Basic | - Getting a Solid Foundation [Roll Dice App]](#section-2-flutter-and-dart-basic-getting-a-solid-foundation-roll-dice-app)
-- [What's included in ISI-Survey](#whats-included-in-isi-survey)
 
 # Section 2 Flutter and Dart Basic Getting a Solid Foundation Roll Dice App
 
@@ -198,4 +197,205 @@ void main() {
     ),
   ));
 }
+```
+
+## How To Configure Widgets & Objects
+
+- Ctrl + Space is a great way to see what value we can put.
+
+- Another way is to google what we wanted to use.
+
+## Practice Styling Text
+
+- I personally use ctrl + space to see what I can do in a widget
+- In my case, I want to style the text so I ctrl + space in the Text() widget.
+
+```dart
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(
+    MaterialApp(
+      home: Scaffold(
+        body: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Color.fromARGB(255, 26, 2, 80),
+                Color.fromARGB(255, 45, 7, 98)
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+          child: const Center(
+            child: Text(
+              "Hello VireakRoth!!",
+              style: TextStyle(color: Colors.white, fontSize: 28),
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
+}
+```
+
+## Onwards to Custom Widgets: Why do you need them?
+
+- As our source code becomes larger and larger we can’t comprehend what is going on if we put in one file. So what we can do is separate it into multiple files and reuse it.
+- To separate the Widget we use the class keyword. We’ll see what it is in the next lecture.
+
+## Understand Classes
+
+- Widget → Object → Data Structure in Memory.
+- So Object is a very crucial concept in Dart
+- Those Objects are instantiated from Classes. Classes are like a blueprint for an Object.
+- So in Object, there are two main components in it which are Data and Functionality.
+- Therefore we also define our custom widgets as Classes.
+
+## Building Custom Widgets
+
+- We have to create a class that `extends` (inherited) a stateless or stateful widget.
+- In that class, we need to have a `build()` method which returns the `Widget` type. Also, we need to add metadata or annotation `@override`
+- `build()` must accept the parameter which is `context` then we return the value in that class.
+
+```dart
+class GradientContainer extends StatelessWidget {
+  @override
+  Widget build(context) {
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            Color.fromARGB(255, 26, 2, 80),
+            Color.fromARGB(255, 45, 7, 98)
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+      ),
+      child: const Center(
+        child: Text(
+          "Hello VireakRoth!!",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 28,
+          ),
+        ),
+      ),
+    );
+  }
+}
+```
+
+## Working with Constructor Functions
+
+- We often see the key parameter thing in the stateless or stateful widget what is it?
+  - The reason is each class needs a constructor method which can be optional.
+  - So the constructor function accepts a special argument which is `key`
+  - Then we can forward it to the class we inherited from by using `:` or we can use a shortcut like this
+    `const GradientContainer({super.key});`
+
+## Splitting Code Across Files
+
+- In this step, we learn we can write the custom widget in a different file and then import it to use in the main.dart file.
+
+## Introducing Variables
+
+- A variable is used to store value and reuse or modify it later.
+
+## Variables & Types - Combining Two Key Concepts
+
+- If we do not put the initial value the value in the variable will be dynamic. This can be error-prone so it is better to put Type? variable
+
+## “final” & “const” - Special Kinds Of “Variables”
+
+- If we knew the variable doesn’t change the value we use `final`
+- We also can use const but when we use const we tell Dart that the value is compile time constant.
+
+## Instance Variables (Properties) & Constructor Functions
+
+- When we want our widget to be reusable we use the Constructor function.
+
+```dart
+child: Center(
+   child: StyleText("PUN VIREAKROTH"),
+),
+```
+
+- In the StyleText class, we need to add property and argument to the constructor class.
+
+```dart
+import 'package:flutter/material.dart';
+
+class StyleText extends StatelessWidget {
+  StyleText(this.text, {super.key});
+
+  final String text;
+
+  @override
+  Widget build(context) {
+    return Text(
+      text,
+      style: const TextStyle(
+        color: Colors.white,
+        fontSize: 28,
+      ),
+    );
+  }
+}
+```
+
+## Practice: Reusable Widgets & Constructor Functions
+
+```dart
+body: GradientContainer(
+          [
+            Colors.deepPurple,
+            Color.fromARGB(255, 56, 23, 67),
+          ],
+        ),
+```
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:roll_dice/style_text.dart';
+
+var startAlignment = Alignment.topLeft;
+var endAlignment = Alignment.bottomRight;
+
+class GradientContainer extends StatelessWidget {
+  const GradientContainer(this.colors, {super.key});
+
+  final List<Color> colors;
+
+  @override
+  Widget build(context) {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: colors,
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+      ),
+      child: Center(
+        child: StyleText("POK POUM CHANNAK"),
+      ),
+    );
+  }
+}
+```
+
+## Displaying Images & Using Multiple Constructor Functions
+
+- Create a new folder called `assets`
+- Then edit the `pubspec.yaml` file.
+
+```dart
+child: Image.asset(
+          'assets/images/dice-2.png',
+          width: 300,
+        ),
 ```
