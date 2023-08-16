@@ -399,3 +399,125 @@ child: Image.asset(
           width: 300,
         ),
 ```
+
+## Adding Buttons & Using Functions As Values
+
+- We’ve introduced `Column` Widget which is a children's `argument` that is to take a list of Widgets.
+- When we implement a function for an argument like onPressed we do not call it with () we just called the function’s name and that is called Function as Value.
+
+## Styling Buttons & Working with Padding
+
+- First, we need to make the dice go center.
+  - In the Column() widget it takes `mainAxisSize: MainAxisSize.min`
+- Then we need to change the style of the button
+
+```dart
+return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: colors,
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+      ),
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Image.asset(
+              'assets/images/dice-2.png',
+              width: 300,
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            TextButton(
+              onPressed: () => "Roll Dice",
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.white,
+                textStyle: const TextStyle(fontSize: 20),
+              ),
+              child: const Text("Roll Dice"),
+            )
+          ],
+        ),
+      ),
+    );
+```
+
+## How NOT To Build Interactive Widgets
+
+- NOTE: If our class can change internally for example if we have a variable that will somewhat change in the future. That of course we can’t put const in front of the constructor.
+- With the below widget, we can’t see the change of the dice image. Why?
+
+```dart
+import 'package:flutter/material.dart';
+// import 'style_text.dart';
+
+var startAlignment = Alignment.topLeft;
+var endAlignment = Alignment.bottomRight;
+
+class GradientContainer extends StatelessWidget {
+  GradientContainer(this.colors, {super.key});
+
+  final List<Color> colors;
+  var activeDiceImage = 'assets/images/dice-2.png';
+
+  void rollDice() {
+    activeDiceImage = "assets/images/dice-4.png";
+    print("Hello World");
+  }
+
+  @override
+  Widget build(context) {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: colors,
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+      ),
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Image.asset(
+              activeDiceImage,
+              width: 300,
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            TextButton(
+              onPressed: () => rollDice(),
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.white,
+                textStyle: const TextStyle(fontSize: 20),
+              ),
+              child: const Text("Roll Dice"),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+```
+
+- The answer is that it is a Stateless widget. So we’ll learn about the Stateful widget in the next lecture.
+
+## Introducing Stateful Widgets
+
+- We use Stateful when there are data may change over time and it impacts on the UI. e.g. when we click on the button the image of the dice changes.
+
+```dart
+import 'package:flutter/material.dart';
+
+class DiceRoller extends StatefulWidget {
+  //...
+}
+```
+
+- In Stateful Widget we don’t use the `build()` method but instead, we have the `createState()` method
+- `createState()` returns the `State<Widget>` value type. And it returns the value `_ClassNameState`
