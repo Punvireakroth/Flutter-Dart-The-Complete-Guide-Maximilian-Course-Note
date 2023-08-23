@@ -861,3 +861,361 @@ Widget screenWidget = StartScreen(switchScreen);
 ## Adding a Data Model & Dummy Data
 
 - To put dummy data we first need to create models
+
+  - Models
+
+  ```dart
+  class QuizQuestion {
+  const QuizQuestion(this.text, this.answer);
+
+  final String text;
+  final List<String> answer;
+  }
+  ```
+
+  - Question
+
+```dart
+import './quiz_questions.dart';
+
+const questions = [
+ QuizQuestion(
+   'What are the main building blocks of Flutter UIs?',
+   [
+     'Widgets',
+     'Components',
+     'Blocks',
+     'Functions',
+   ],
+ ),
+ QuizQuestion('How are Flutter UIs built?', [
+   'By combining widgets in code',
+   'By combining widgets in a visual editor',
+   'By defining widgets in config files',
+   'By using XCode for iOS and Android Studio for Android',
+ ]),
+ QuizQuestion(
+   'What\'s the purpose of a StatefulWidget?',
+   [
+     'Update UI as data changes',
+     'Update data as UI changes',
+     'Ignore data changes',
+     'Render UI that does not depend on data',
+   ],
+ ),
+ QuizQuestion(
+   'Which widget should you try to use more often: StatelessWidget or StatefulWidget?',
+   [
+     'StatelessWidget',
+     'StatefulWidget',
+     'Both are equally good',
+     'None of the above',
+   ],
+ ),
+ QuizQuestion(
+   'What happens if you change data in a StatelessWidget?',
+   [
+     'The UI is not updated',
+     'The UI is updated',
+     'The closest StatefulWidget is updated',
+     'Any nested StatefulWidgets are updated',
+   ],
+ ),
+ QuizQuestion(
+   'How should you update data inside of StatefulWidgets?',
+   [
+     'By calling setState()',
+     'By calling updateData()',
+     'By calling updateUI()',
+     'By calling updateState()',
+   ],
+ ),
+];
+```
+
+## Configuring a Column
+
+- To stretch the column to take as much space as possible we use to wrap our Column widget with `SizedBox()` and put the width to `double.infinity`
+
+```js
+return SizedBox(
+      width: double.infinity,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text(
+            "The Answer",
+            style: TextStyle(color: Colors.white, fontSize: 25),
+          ),
+          SizedBox(height: 30),
+          ElevatedButton(
+            onPressed: () {},
+            child: Text('Answer 1'),
+          ),
+          SizedBox(height: 30),
+          ElevatedButton(
+            onPressed: () {},
+            child: Text('Answer 2'),
+          ),
+          SizedBox(height: 30),
+          ElevatedButton(
+            onPressed: () {},
+            child: Text('Answer 3'),
+          ),
+        ],
+      ),
+    );
+```
+
+## Creating a Reuseable, Custom Styled Button
+
+- We notice that we have reused the ElevatedButton over and over again. So we can make our Widget reusable.
+  - So what we do is we separate the button to different file and accept and variable and function.
+
+```js
+import 'package:flutter/material.dart';
+
+class AnswerButton extends StatelessWidget {
+  const AnswerButton(this.questionIndex, this.onTap, {super.key});
+  final String questionIndex;
+  final void Function() onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: onTap,
+      style: ElevatedButton.styleFrom(
+        padding: const EdgeInsets.symmetric(
+          vertical: 10,
+          horizontal: 30,
+        ),
+        backgroundColor: const Color.fromARGB(255, 24, 61, 61),
+        foregroundColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(50),
+        ),
+      ),
+      child: Text('Answer $questionIndex'),
+    );
+  }
+}
+```
+
+```js
+AnswerButton(
+            "1",
+            () {
+              print("Hello");
+            },
+          ),
+```
+
+## Accessing List Elements & Object Properties
+
+- If we have a list and we wanna access it we can use [] or .
+
+```js
+final currentQuestion = questions[0];
+    return SizedBox(
+      width: double.infinity,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            currentQuestion.text,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 18,
+            ),
+          ),
+          const SizedBox(height: 30),
+          AnswerButton(
+            currentQuestion.answer[0],
+            () {
+              print("Hello");
+            },
+          ),
+          const SizedBox(height: 30),
+          AnswerButton(
+            currentQuestion.answer[1],
+            () {
+              print("Pink");
+            },
+          ),
+          const SizedBox(height: 30),
+          AnswerButton(
+            currentQuestion.answer[2],
+            () {
+              print("World");
+            },
+          ),
+          const SizedBox(height: 30),
+          AnswerButton(
+            currentQuestion.answer[3],
+            () {
+              print("World");
+            },
+          ),
+        ],
+      ),
+    );
+```
+
+## Mapping Lists & Using the Spread Operator
+
+- Now we try to display the answer button dynamically based on the number of answers we had.
+- spread operator is used to pull out the value in the list to a comma-separated value. It’s denoted as …
+
+```js
+child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            currentQuestion.text,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 18,
+            ),
+          ),
+          const SizedBox(height: 30),
+          ...currentQuestion.answer.map(
+            (answer) {
+              return AnswerButton(
+                answer,
+                () {
+                  print("Hello");
+                },
+              );
+            },
+          ),
+        ],
+      ),
+```
+
+## Alignment, Margin & Padding
+
+- We’re going to make the question stretch through the screen horizontally.
+
+```dart
+SizedBox(
+      width: double.infinity,
+      child: Container(
+        margin: EdgeInsets.only(left: 20, right: 20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              currentQuestion.text,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 30),
+            ...currentQuestion.answer.map(
+              (answer) {
+                return AnswerButton(
+                  answer,
+                  () {
+                    print("Hello");
+                  },
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+```
+
+## Mutating values in Memory
+
+- We now want to shuffle the answer list. We can achieve that by using the .suffle() method on list but that does change the original list. So what we do is we need to copy the original list first before we suffle.
+  - So the the QuizQuestion model I added a `getSuffledAnswers()` method
+
+```js
+class QuizQuestion {
+  const QuizQuestion(this.text, this.answer);
+
+  final String text;
+  final List<String> answer;
+
+  List<String> getSuffledAnswers() {
+    final shuffledList = List.of(answer);
+    shuffledList.shuffle();
+    return shuffledList;
+  }
+}
+```
+
+```js
+...currentQuestion.getSuffledAnswers().map(
+              (answer) {
+                return AnswerButton(
+                  answer,
+                  () {
+                    print("Hello");
+                  },
+                );
+              },
+            ),
+```
+
+## Managing The Questions Index As State
+
+```dart
+class _QuestionScreenState extends State<QuestionsScreen> {
+  var currentQuestionIndex = 0;
+  void answerQuestion() {
+    setState(() {
+      currentQuestionIndex += 1;
+    });
+  }
+
+  @override
+  Widget build(context) {
+    final currentQuestion = questions[currentQuestionIndex];
+    return SizedBox(
+      width: double.infinity,
+      child: Container(
+        margin: const EdgeInsets.only(left: 20, right: 20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              currentQuestion.text,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 30),
+            ...currentQuestion.getSuffledAnswers().map(
+              (answer) {
+                return AnswerButton(
+                  answer,
+                  answerQuestion,
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+```
+
+## Text Style and Google Font
+
+- First, align the text in the button to go to center
+- Make the question title bigger and bold Also change the font by using Google font as well.
+
+## Passing Data via Functions Across Widgets
+
+- We now have to store the selected answer.
+- Show a different screen when we went through all the answers.
