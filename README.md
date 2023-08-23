@@ -5,6 +5,7 @@ Feel free to PR to improve or update this course note.
 # Contents
 
 - [Section 2 Flutter & Dart Basic | - Getting a Solid Foundation [Roll Dice App]](#section-2-flutter-and-dart-basic-getting-a-solid-foundation-roll-dice-app)
+- [Section 3 Flutter & Dart Basic II - Fundamentals Deep Dive [Quiz App]](#section-3-flutter--dart-basic-ii---fundamentals-deep-dive-quiz-app)
 
 # Section 2 Flutter and Dart Basic Getting a Solid Foundation Roll Dice App
 
@@ -558,3 +559,301 @@ Some Packages like `dart:math` doesn’t need to config `pubspec.yaml` file.
 - The Widgets are object that instantiate from classes
 - There are two types of widgets
   - stateless and stateful widget
+
+# Section 3 Flutter & Dart Basic II - Fundamentals Deep Dive [Quiz App]
+
+## A Challenge For You!
+
+- Build an App Screen
+  `main.dart`
+
+```js
+import 'package:flutter/material.dart';
+import 'start_screen.dart';
+
+void main() {
+  runApp(
+    MaterialApp(
+      home: Scaffold(
+        body: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Colors.black87,
+                Colors.black54,
+              ],
+              begin: Alignment.topRight,
+              end: Alignment.bottomLeft,
+            ),
+          ),
+          child: const StartScreen(),
+        ),
+      ),
+    ),
+  );
+}
+```
+
+`start_screen.dart`
+
+```js
+import 'package:flutter/material.dart';
+
+class StartScreen extends StatelessWidget {
+  const StartScreen({super.key});
+  @override
+  Widget build(context) {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Image.asset("assets/images/quiz-logo.png", width: 350),
+          const SizedBox(height: 60),
+          const Text(
+            "Flutter in Cambodia ",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 26,
+            ),
+          ),
+          const SizedBox(height: 60),
+          const OutlinedButton(
+            onPressed: null,
+            child: Text(
+              "Proceed to the quiz",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+```
+
+## Adding Icons to Buttons
+
+- We’ll make the image transparency and button make gonna turn it with icons
+- To Create a Button with an icon
+  - ButtonNameWidget.icon(onPress() {}, style: .., label: const Text(),),
+
+```js
+OutlinedButton.icon(
+            onPressed: () {},
+            style: OutlinedButton.styleFrom(
+              foregroundColor: Colors.white,
+            ),
+            icon: const Icon(Icons.arrow_right_alt),
+            label: const Text(
+              "Proceed to the quiz",
+            ),
+          )
+```
+
+## Adding Transparency to Widgets
+
+- There are two ways we can achieve the transparency
+
+  - 1 Method is to wrap the Image() widget with Opacity()
+
+  ```js
+  Opacity(
+   opacity: 0.5,
+   child: Image.asset("assets/images/quiz-logo.png", width: 350),
+  ),
+  ```
+
+  - 2 Method is to apply color: argument then tweak in the color picker
+
+## Repetition & Exercise: Adding a Stateful Wiget
+
+- Over the next few lecture, we’ll learn
+  - Render the Content conditionally
+  - Know how to lift state up
+- But for now just create two new stateful widget
+  `main.dart`
+
+```js
+import 'package:flutter/material.dart';
+import 'quiz.dart';
+
+void main() {
+  runApp(
+    const Quiz(),
+  );
+}
+```
+
+`quiz.dart`
+
+```js
+import 'package:flutter/material.dart';
+import 'start_screen.dart';
+
+class Quiz extends StatefulWidget {
+  const Quiz({super.key});
+  @override
+  State<Quiz> createState() {
+    return _QuizState();
+  }
+}
+
+class _QuizState extends State<Quiz> {
+  @override
+  Widget build(context) {
+    return MaterialApp(
+      home: Scaffold(
+        body: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Colors.black87,
+                Colors.black54,
+              ],
+              begin: Alignment.topRight,
+              end: Alignment.bottomLeft,
+            ),
+          ),
+          child: const StartScreen(),
+        ),
+      ),
+    );
+  }
+}
+```
+
+## Rendering Context Conditionally
+
+- When we wanna change to a different screen for example like when we click on the button. We have two ways to achieve that.
+  - Rendering Content Conditionally
+  - Lifting State Up
+- Well look at Rendering Content Conditionally
+  - In fact we can store Widget in a Variable
+
+```dart
+import 'package:flutter/material.dart';
+import 'start_screen.dart';
+import 'questions_screen.dart';
+
+class Quiz extends StatefulWidget {
+  const Quiz({super.key});
+  @override
+  State<Quiz> createState() {
+    return _QuizState();
+  }
+}
+
+class _QuizState extends State<Quiz> {
+  Widget activeScreen = const StartScreen(); // **
+
+  void switchScreen() {
+    setState(() {
+      activeScreen = const QuestionsScreen(); //**
+    });
+  }
+
+  @override
+  Widget build(context) {
+    return MaterialApp(
+      home: Scaffold(
+        body: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Colors.black87,
+                Colors.black54,
+              ],
+              begin: Alignment.topRight,
+              end: Alignment.bottomLeft,
+            ),
+          ),
+          child: activeScreen,
+        ),
+      ),
+    );
+  }
+}
+```
+
+## Accepting & Passing Functions as Values
+
+- If we have two widget that depends on the same state. In this case, the button on the start_screen when click changes to the question_screen but the change logic is in the quiz.dart.
+- So what we do is pass a `pointer` (switch screen) method from the quiz.dart file to the `StartScreen()` widget.
+
+```js
+class _QuizState extends State<Quiz> {
+  Widget activeScreen = const StartScreen(switchScreen);
+
+  void switchScreen() {
+    setState(() {
+      activeScreen = const QuestionsScreen();
+    });
+  }
+}
+```
+
+```js
+class StartScreen extends StatelessWidget {
+  const StartScreen(this.startQuiz, {super.key});
+
+  final void Function() startQuiz;
+}
+```
+
+## The “initState” Method
+
+- At the moment we’re getting the error in the line I put \*\*
+
+```dart
+class _QuizState extends State<Quiz> {
+  Widget activeScreen = const StartScreen(switchScreen); // **
+
+  void switchScreen() {
+    setState(() {
+      activeScreen = const QuestionsScreen();
+    });
+  }
+}
+```
+
+- The reason we’re getting the error is that we’re using the `switchScreen` when initializing the `activeScreen` Variable. (It’s too early to reference the switch screen method)
+- To Solve this we can use `initState` to set the state when initialize for the first time. So finally we get this code.
+
+```js
+class _QuizState extends State<Quiz> {
+  Widget? activeScreen;
+
+  @override
+  void initState() {
+    activeScreen = StartScreen(switchScreen);
+    super.initState();
+  }
+
+  void switchScreen() {
+    setState(() {
+      activeScreen = const QuestionsScreen();
+    });
+  }
+}
+```
+
+- The reason for this error is that the switchScreen() method calls the setState() method. The setState() method tells Flutter to rebuild the widget. However, if you call setState() before the initState() method has been called, Flutter will not rebuild the widget. This is because the widget is not yet fully initialized.
+
+## Using Ternary Expression & Comparison Operator
+
+- There is some alternative way we can conditionally render the screen through.
+  `expression ? result : result`
+
+## Understanding “if” Statements
+
+```dart
+Widget screenWidget = StartScreen(switchScreen);
+    if (activeScreen == "start-screen") {
+      screenWidget = StartScreen(switchScreen);
+    } else {
+      screenWidget = const QuestionsScreen();
+    }
+```
