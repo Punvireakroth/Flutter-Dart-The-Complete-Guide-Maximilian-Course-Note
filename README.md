@@ -521,3 +521,40 @@ class DiceRoller extends StatefulWidget {
 
 - In Stateful Widget we don’t use the `build()` method but instead, we have the `createState()` method
 - `createState()` returns the `State<Widget>` value type. And it returns the value `_ClassNameState`
+
+  ```js
+  import 'package:flutter/material.dart';
+
+  class DiceRoller extends StatefulWidget {
+    @override
+    State<DiceRoller> createState() {
+      return _DiceRollerState();
+    }
+  }
+
+  class _DiceRollerState extends State<DiceRoller> {
+    @override
+    Widget build(context) {
+      return
+    }
+  }
+  ```
+
+- For the constructor of the StatefulWidget, it can be const because we have a class separate
+
+- To eventually make the UI change in Stateful Widget we must need
+  - To called a function in a place where we update the value. And that function is `setState(() {})`
+
+## Generating Random Numbers
+
+Some Packages like `dart:math` doesn’t need to config `pubspec.yaml` file.
+
+## Module Summary
+
+- `main.dart` is where our code executes
+- it converts human-readable code into machine code.
+- Function with argument
+  - `main()` → `runApp()` → Widgets
+- The Widgets are object that instantiate from classes
+- There are two types of widgets
+  - stateless and stateful widget
