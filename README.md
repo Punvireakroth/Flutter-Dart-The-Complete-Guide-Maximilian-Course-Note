@@ -857,3 +857,7 @@ Widget screenWidget = StartScreen(switchScreen);
       screenWidget = const QuestionsScreen();
     }
 ```
+
+## Adding a Data Model & Dummy Data
+
+- To put dummy data we first need to create models
